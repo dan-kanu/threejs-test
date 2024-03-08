@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { VRButton } from "three/addons/webxr/VRButton.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-import spaceTexture from "./fire.jpg";
+import spaceTexture from "./fireplace.jpg";
 
 const texture = new THREE.TextureLoader().load(spaceTexture);
 
@@ -48,7 +48,7 @@ const torusMaterial = new THREE.MeshStandardMaterial({
 // Mesh
 const torus = new THREE.Mesh(torusGeometry, torusMaterial);
 const cube = new THREE.Mesh(geometry, material);
-cube.position.set(0, 5, 50);
+cube.position.set(0, 5, -50);
 scene.add(cube);
 
 // Lights
