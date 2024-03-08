@@ -4,6 +4,10 @@ import * as THREE from "three";
 import { VRButton } from "three/addons/webxr/VRButton.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
+import spaceTexture from "./stars.jpg";
+
+const texture = new THREE.TextureLoader().load(spaceTexture);
+const gallery = "./images/gallery.glb";
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -71,13 +75,13 @@ function addStar() {
 Array(200).fill().forEach(addStar);
 
 // Add Background
-const spaceTexture = new THREE.TextureLoader().load("stars.jpg");
-scene.background = spaceTexture;
+// const spaceTexture = new THREE.TextureLoader().load("stars.jpg");
+scene.background = texture;
 
 // Add Model
 const loader = new GLTFLoader();
 loader.load(
-  "/images/gallery.glb",
+  gallery,
   function (gltf) {
     const model = gltf.scene;
     scene.add(model);
