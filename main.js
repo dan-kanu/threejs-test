@@ -33,7 +33,7 @@ const torusMaterial = new THREE.MeshStandardMaterial({
 // Mesh
 const torus = new THREE.Mesh(torusGeometry, torusMaterial);
 const cube = new THREE.Mesh(geometry, material);
-
+cube.position.set(0, 5, 50);
 scene.add(cube);
 
 // Lights
