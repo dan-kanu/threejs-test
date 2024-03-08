@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { VRButton } from "three/addons/webxr/VRButton.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-import spaceTexture from "./night.jpg";
+import spaceTexture from "./fireplace.jpg";
 
 const texture = new THREE.TextureLoader().load(spaceTexture);
 
@@ -31,9 +31,6 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 camera.position.setZ(30);
-renderer.setAnimationLoop(function () {
-  renderer.render(scene, camera);
-});
 
 // Geometries
 const geometry = new THREE.BoxGeometry(10, 10, 10);
@@ -58,11 +55,6 @@ pointLigth.intensity = 111.5;
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
 scene.add(pointLigth, ambientLight);
-//
-
-const lightHelper = new THREE.PointLightHelper(pointLigth);
-const gridHelper2 = new THREE.GridHelper(200, 50);
-// scene.add(lightHelper, gridHelper2);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -85,18 +77,18 @@ function addStar() {
 Array(200).fill().forEach(addStar);
 
 // Add Background
-// const spaceTexture = new THREE.TextureLoader().load("stars.jpg");
 scene.background = texture;
-
-scene.background.mapping = THREE.EquirectangularReflectionMapping; // fix background in VR
 
 // Add Model
 const loader = new GLTFLoader();
+let model;
+
 loader.load(
   gallery,
   function (gltf) {
-    const model = gltf.scene;
+    model = gltf.scene;
     scene.add(model);
+    animate(); // Start animation when the model is loaded
   },
   function (xhr) {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -106,21 +98,24 @@ loader.load(
   }
 );
 
-// Animation
-
 function animate() {
-  requestAnimationFrame(animate);
+  renderer.setAnimationLoop(renderVR);
+}
+
+function renderVR() {
+  if (model) {
+    // Update animations here if needed
+  }
+
   cube.rotation.x += -0.01;
   cube.rotation.y += -0.01;
   torus.rotation.x += 0.01;
   torus.rotation.y += 0.01;
   torus.rotation.z += 0.01;
+
   controls.update();
   renderer.render(scene, camera);
 }
-cube.getWorldPosition(camera.position);
-animate();
 
 document.body.appendChild(VRButton.createButton(renderer));
-
 renderer.xr.enabled = true;
