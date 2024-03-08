@@ -107,12 +107,8 @@ loader.load(
 );
 
 // Animation
-+(+function animate() {
-  // Animate cube in VR
-  if (renderer.xr.enabled) {
-    cube.getWorldPosition(camera.position);
-  }
 
+function animate() {
   requestAnimationFrame(animate);
   cube.rotation.x += -0.01;
   cube.rotation.y += -0.01;
@@ -121,8 +117,8 @@ loader.load(
   torus.rotation.z += 0.01;
   controls.update();
   renderer.render(scene, camera);
-});
-
+}
+cube.getWorldPosition(camera.position);
 animate();
 
 document.body.appendChild(VRButton.createButton(renderer));
