@@ -78,6 +78,8 @@ Array(200).fill().forEach(addStar);
 // const spaceTexture = new THREE.TextureLoader().load("stars.jpg");
 scene.background = texture;
 
+scene.background.mapping = THREE.EquirectangularReflectionMapping; // fix background in VR
+
 // Add Model
 const loader = new GLTFLoader();
 loader.load(
