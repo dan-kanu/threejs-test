@@ -4,10 +4,20 @@ import * as THREE from "three";
 import { VRButton } from "three/addons/webxr/VRButton.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-import spaceTexture from "./stars.jpg";
+import spaceTexture from "./night.jpg";
 
 const texture = new THREE.TextureLoader().load(spaceTexture);
+
 const gallery = "./images/gallery.glb";
+
+console.assert(
+  gallery.startsWith("http://") ||
+    gallery.startsWith("https://") ||
+    gallery.startsWith("./") ||
+    gallery.startsWith("../"),
+  "gallery asset URL must be absolute (http://, https://, ./, or ../)"
+);
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -52,7 +62,7 @@ scene.add(pointLigth, ambientLight);
 
 const lightHelper = new THREE.PointLightHelper(pointLigth);
 const gridHelper2 = new THREE.GridHelper(200, 50);
-scene.add(lightHelper, gridHelper2);
+// scene.add(lightHelper, gridHelper2);
 
 // Helpers
 const controls = new OrbitControls(camera, renderer.domElement);
