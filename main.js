@@ -5,6 +5,7 @@ import { VRButton } from "three/addons/webxr/VRButton.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 import spaceTexture from "./fireplace.jpg";
+import gokuTexture from "./images/goku.jpeg";
 
 const texture = new THREE.TextureLoader().load(spaceTexture);
 
@@ -57,6 +58,7 @@ pointLigth.position.set(5, 5, 10);
 pointLigth.intensity = 111.5;
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
+ambientLight.intensity = 23;
 scene.add(pointLigth, ambientLight);
 //
 
@@ -84,7 +86,6 @@ function addStar() {
 
 Array(200).fill().forEach(addStar);
 
-// Add Background
 // const spaceTexture = new THREE.TextureLoader().load("stars.jpg");
 scene.background = texture;
 
@@ -96,7 +97,7 @@ loader.load(
   gallery,
   function (gltf) {
     const model = gltf.scene;
-    scene.add(model);
+    // scene.add(model);
   },
   function (xhr) {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -106,6 +107,15 @@ loader.load(
   }
 );
 
+// Avatar
+
+const gokuBox = new THREE.TextureLoader().load(gokuTexture);
+const goku = new THREE.Mesh(
+  new THREE.BoxGeometry(5, 10, 5),
+  new THREE.MeshBasicMaterial({ map: gokuBox })
+);
+
+scene.add(goku);
 // Animation
 
 function animate() {
@@ -115,6 +125,8 @@ function animate() {
   torus.rotation.x += 0.01;
   torus.rotation.y += 0.01;
   torus.rotation.z += 0.01;
+  goku.rotation.y += 0.01;
+
   controls.update();
   renderer.render(scene, camera);
 }
