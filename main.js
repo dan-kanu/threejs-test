@@ -111,28 +111,112 @@ loader.load(
 
 const gokuBox = new THREE.TextureLoader().load(gokuTexture);
 const goku = new THREE.Mesh(
-  new THREE.BoxGeometry(5, 10, 5),
+  new THREE.BoxGeometry(15, 29, 15),
   new THREE.MeshBasicMaterial({ map: gokuBox })
 );
 goku.position.set(10, 0, -5);
 scene.add(goku);
 // Animation
 
-function animate() {
-  requestAnimationFrame(animate);
-  cube.rotation.x += -0.01;
-  cube.rotation.y += -0.01;
-  torus.rotation.x += 0.01;
-  torus.rotation.y += 0.01;
-  torus.rotation.z += 0.01;
-  goku.rotation.y += 0.01;
+// Create XR controllers
+const controller1 = renderer.xr.getController(0);
+controller1.addEventListener("selectstart", onSelectStart);
+controller1.addEventListener("selectend", onSelectEnd);
+scene.add(controller1);
 
-  controls.update();
-  renderer.render(scene, camera);
-}
-cube.getWorldPosition(camera.position);
-animate();
+const controller2 = renderer.xr.getController(1);
+controller2.addEventListener("selectstart", onSelectStart);
+controller2.addEventListener("selectend", onSelectEnd);
+scene.add(controller2);
+
+// Add controller models
+const controller1Model =
+  XRControllerModelFactory.createControllerModel(controller1);
+const controller2Model =
+  XRControllerModelFactory.createControllerModel(controller2);
+
+controller1.add(controller1Model);
+controller2.add(controller2Model);
+
+// Create hands
+const hand1 = new XRHandController(controller1);
+const hand2 = new XRHandController(controller2);
+
+// Add hand models
+const hand1Model = XRHandModelFactory.createHandModel(hand1);
+const hand2Model = XRHandModelFactory.createHandModel(hand2);
+
+scene.add(hand1Model);
+scene.add(hand2Model);
 
 document.body.appendChild(VRButton.createButton(renderer));
 
+function onSelectStart(event) {
+  const controller = event.target;
+
+  const intersections = getIntersections(controller);
+
+  if (intersections.length > 0) {
+    const object = intersections[0].object;
+    // Handle selection logic
+  }
+}
+
+function onSelectEnd(event) {
+  // Handle selection end logic
+}
+
+function getIntersections(controller) {
+  const tempMatrix = new THREE.Matrix4();
+  const matrixWorld = controller.matrixWorld;
+  const raycaster = new THREE.Raycaster();
+
+  raycaster.ray.origin.setFromMatrixPosition(matrixWorld);
+  raycaster.ray.direction.set(0, 0, -1).applyMatrix4(tempMatrix);
+
+  // Perform intersection checks and return the results
+  // Modify as per your specific needs
+
+  return raycaster.intersectObjects(scene.children, true);
+}
+
+// ... (Your existing code)
+
+// Update the animate function
+function animate() {
+  renderer.setAnimationLoop(function (frame) {
+    cube.rotation.x += -0.01;
+    cube.rotation.y += -0.01;
+    torus.rotation.x += 0.01;
+    torus.rotation.y += 0.01;
+    torus.rotation.z += 0.01;
+    goku.rotation.y += 0.01;
+
+    // Update XR controllers
+    hand1.update(frame);
+    hand2.update(frame);
+
+    controls.update();
+    renderer.render(scene, camera);
+  });
+}
+
+// Call animate directly instead of within setAnimationLoop
+animate();
+
+cube.getWorldPosition(camera.position);
+animate();
+
+// ... (Your existing code)
+
+document.body.appendChild(VRButton.createButton(renderer));
+
+// Ensure VR Resize
+window.addEventListener("resize", function () {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Enable XR
 renderer.xr.enabled = true;
