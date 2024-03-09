@@ -3,7 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from "three";
 import { VRButton } from "three/addons/webxr/VRButton.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-
+import { XRControllerModelFactory } from "https://cdn.jsdelivr.net/npm/three@0.119.1/examples/jsm/webxr/XRControllerModelFactory.min.js";
 import spaceTexture from "./fireplace.jpg";
 import gokuTexture from "./images/goku.jpeg";
 
@@ -114,7 +114,7 @@ const goku = new THREE.Mesh(
   new THREE.BoxGeometry(5, 10, 5),
   new THREE.MeshBasicMaterial({ map: gokuBox })
 );
-goku.position.set(10, 15, -5);
+goku.position.set(10, 0, -5);
 scene.add(goku);
 // Animation
 
