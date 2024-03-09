@@ -114,7 +114,7 @@ const goku = new THREE.Mesh(
   new THREE.BoxGeometry(5, 10, 5),
   new THREE.MeshBasicMaterial({ map: gokuBox })
 );
-
+goku.position.set(10, 15, -5);
 scene.add(goku);
 // Animation
 
